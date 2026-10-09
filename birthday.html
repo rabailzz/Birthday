@@ -1,0 +1,333 @@
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Birthday Cake 🎂</title>
+    <link rel="stylesheet" href="birthday.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
+          rel="stylesheet" />
+    <style>
+        #mainTitle {
+            font-size: 32px;
+            font-family: 'Pixelify Sans', sans-serif;
+            margin-bottom: 8px;
+        }
+
+        #subTitle {
+            font-size: 18px;
+            font-family: 'Pixelify Sans', sans-serif;
+            color: #555;
+        }
+
+        /* Full-screen blurred backdrop for the initial button */
+        .open-btn-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(40, 40, 40, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+            .open-btn-container.show {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+        .open-special-btn {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: #e75480;
+            color: #ffffff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+            .open-special-btn:hover {
+                transform: scale(1.05);
+                background-color: #d0436d;
+            }
+
+        /* The journal message box overlay */
+        .message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(40, 40, 40, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+            .message-overlay.show {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+        .journal-card {
+            background-color: #3a3a3d;
+            width: 90%;
+            max-width: 500px;
+            height: 460px;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: left;
+            color: #e0e0e0;
+            border: 1px solid #4a4a4e;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+            .journal-card h2 {
+                color: #e75480;
+                margin-top: 0;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+
+        .message-content-box {
+            background-color: #444448;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #f0f0f0;
+            line-height: 1.6;
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #55555a;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body style="background-image: url('bg3.jpg'); background-size: cover; background-repeat: no-repeat;">
+    <div class="container">
+        <div id="birthdayText"></div>
+        <div class="cake-container">
+            <div class="cake" id="cake"></div>
+        </div>
+        <img src="table.png" class="table" />
+    </div>
+
+    <!-- Initial button with full-screen blur background -->
+    <div id="openBtnContainer" class="open-btn-container">
+        <button class="open-special-btn" onclick="openJournalBox()">Special Note by Rabi</button>
+    </div>
+
+    <!-- The journal box overlay -->
+    <div id="messageOverlay" class="message-overlay">
+        <div class="journal-card">
+            <h2>Dear Tatheer</h2>
+            <div class="message-content-box">
+                The first day of uni when we met, I immediately felt your positive energy.<br><br>
+                Before we became friends, uni honestly felt so boring, but after you started sitting next to me, everything somehow started feeling so much better.<br><br>
+                You have the sweetest heart, and I love how kind you are to everyone. You always make sure no one gets hurt,<br>
+                and I love the way you remember the smallest things about me. I love how you tell me every day how pretty I look, when honestly, it’s you who looks the prettiest.<br><br>
+                You’re genuinely one of the softest and sweetest people I know. I hate the way you underestimate yourself sometimes,<br>
+                because you’re such a capable, amazing person and you deserve to see yourself the way I see you.<br><br>
+                I just want to say that I hope you get every beautiful and amazing thing you deserve in life.<br>
+                Whatever happens, I hope life always gives you reasons to smile, because you’re truly deserving of all the good things in this world.<br><br>
+                I love you sooo muchhh &lt; 3<br><br>
+                Yours sincerely,<br>
+                Rabailll 💌
+            </div>
+        </div>
+    </div>
+
+    <section id="next-section" style="height: 100vh; padding: 50px;">
+        <!-- Next section content -->
+    </section>
+
+    <script>
+        // Opens the journal message box when the initial button is explicitly clicked
+        function openJournalBox() {
+        document.getElementById("openBtnContainer").classList.remove("show");
+        document.getElementById("messageOverlay").classList.add("show");
+        }
+
+        // Read URL params
+        const params = new URLSearchParams(window.location.search);
+        let candleCount = parseInt(params.get("candles")) || 4;
+        candleCount = Math.min(Math.max(candleCount, 1), 30);
+
+        const birthdayText = document.getElementById("birthdayText");
+        birthdayText.innerHTML = `
+        <img src="banner.png" alt="Fairy Lights" class="fairy-lights-img">
+        <div id="mainTitle" class="glow-text">Happy Birthday, Tatheer!</div>
+        <div id="subTitle" class="glow-text">Click anywhere, make a wish, and blow! 🎂</div>
+        `;
+
+        const cake = document.getElementById("cake");
+        const colors = [
+        "green-candle",
+        "purple-candle",
+        "blue-candle",
+        "yellow-candle",
+        ];
+        const CAKE_VISUAL_WIDTH = 35;
+
+        function createCandles(count) {
+        cake.innerHTML = "";
+        const CANDLE_VISUAL_WIDTH = 2;
+        const availableWidth = CAKE_VISUAL_WIDTH;
+        const candlesPerRow = 6;
+        const shiftAmount = 4;
+
+        for (let i = 0; i < count; i++) {
+        const candle = document.createElement("div");
+        candle.classList.add("candle");
+        const colorClass = colors[Math.floor(Math.random() * colors.length)];
+        candle.classList.add(colorClass);
+
+        const row = Math.floor(i / candlesPerRow);
+        const col = i % candlesPerRow;
+        const totalCandlesInRow = Math.min(
+        candlesPerRow,
+        count - row * candlesPerRow
+        );
+        const rowSpacing = availableWidth / (totalCandlesInRow + 1);
+
+        const leftBase = rowSpacing * (col + 1) - CANDLE_VISUAL_WIDTH / 2 + 5;
+        const rowShift = row % 2 === 0 ? 0 : shiftAmount;
+
+        candle.style.position = "absolute";
+        candle.style.top = `${10 + row * 3}px`;
+        candle.style.left = `${leftBase - rowShift + 4}px`;
+
+        cake.appendChild(candle);
+        }
+        }
+
+        createCandles(candleCount);
+
+        // Start mic on the first click anywhere on the page
+        let micStarted = false;
+        document.body.addEventListener("click", async () => {
+        if (micStarted) return;
+        micStarted = true;
+
+        const subTitle = document.getElementById("subTitle");
+        subTitle.textContent = "Listening... Blow now!";
+
+        try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+        }
+
+        const source = audioContext.createMediaStreamSource(stream);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        let blown = false;
+
+        function detectBlow() {
+        analyser.getByteFrequencyData(dataArray);
+
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+        sum += dataArray[i];
+        }
+        const volume = sum / dataArray.length;
+
+        if (volume > 15 && !blown) {
+        blown = true;
+        blowOutCandles();
+        stream.getTracks().forEach(track => track.stop());
+        return;
+        }
+
+        requestAnimationFrame(detectBlow);
+        }
+
+        detectBlow();
+        } catch (err) {
+        console.error("Mic access error:", err);
+        subTitle.textContent = "Microphone access blocked!";
+        }
+        }, { once: true });
+
+
+        function blowOutCandles() {
+        const candles = document.querySelectorAll(".candle");
+        candles.forEach((candle) => {
+        const delay = Math.random() * 800;
+        setTimeout(() => {
+        colors.forEach((color) => {
+        if (candle.classList.contains(color)) {
+        candle.classList.add("blown");
+        }
+        });
+        }, delay);
+        });
+
+        // Wait for candles to blow out, then trigger audio, confetti, and button with correct timing
+        setTimeout(() => {
+        const subTitle = document.getElementById("subTitle");
+        subTitle.textContent = `Yayy! Wishing you the happiest birthday ever!! 🎉`;
+
+        // Play the background audio file only after blowing is detected
+        const birthdayAudio = new Audio('song.mp3');
+        birthdayAudio.play().catch(error => console.log("Audio play failed:", error));
+
+        // Custom theme colors: golden, pink, light red
+        const customColors = ['#ffd700', '#ff69b4', '#ff4d4d'];
+
+        // Fire confetti from the left side across the screen
+        confetti({
+        particleCount: 80,
+        angle: 60,
+        spread: 80,
+        origin: { x: 0, y: 0.7 },
+        colors: customColors
+        });
+
+        // Fire confetti from the right side across the screen
+        confetti({
+        particleCount: 80,
+        angle: 120,
+        spread: 80,
+        origin: { x: 1, y: 0.7 },
+        colors: customColors
+        });
+
+        // Show the initial "Special Note by Rabi" button with a proper delay after confetti
+        setTimeout(() => {
+        document.getElementById("openBtnContainer").classList.add("show");
+        }, 3500); // Appears 3.5 seconds after celebration starts
+
+        }, 1000);
+        }
+    </script>
+</body>
+</html>
