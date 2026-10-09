@@ -3,9 +3,9 @@
    
 }
 body {
-    background-image: url('bg3.jpg');
-    background-size: 500px; /* Adjust this value: smaller number = smaller bows, larger number = bigger bows */
-    background-repeat: no-repeat; /* This makes the pattern repeat across the screen */
+    background-image: url('./bg3.jpg');
+    background-size: 500px;
+    background-repeat: no-repeat;
     background-position: center;
     position: relative;
     margin: 0;
